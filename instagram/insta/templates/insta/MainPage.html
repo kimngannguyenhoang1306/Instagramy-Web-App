@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Instagram Analyzer</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;700&display=swap" rel="stylesheet">
+    <style>
+        h1 {
+             font-family: 'Open Sans', sans-serif;
+             font-weight: bold;
+             text-transform: uppercase;
+             color: #2a374b;
+        }
+        .text-center a {
+            font-family: Oswald, sans-serif;
+            padding-left: 20px;
+            padding-right: 20px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+        $(document).ready(function()
+        {
+            var choose = "{{ choose }}"
+            switch (choose)
+            {
+                case "UserInfo":
+                    $("#form label").contents().eq(0).replaceWith("Username");
+                    $("#form label").contents().eq(1).replaceWith("SessionID");
+                    $("input[id='id_text']").attr("placeholder", "Nhập Username...");
+                    $("input[id='id_sessionid']").attr("placeholder", "Nhập SessionID...");
+                    break;
+                case "Post":
+                    $("#form label").contents().eq(0).replaceWith("PostID");
+                    $("#form label").contents().eq(1).replaceWith("SessionID");
+                    $("input[id='id_text']").attr("placeholder", "Nhập PostID...");
+                    $("input[id='id_sessionid']").attr("placeholder", "Nhập SessionID...");
+                    break;
+                case "HashTag":
+                    $("#form label").contents().eq(0).replaceWith("HashTag");
+                    $("#form label").contents().eq(1).replaceWith("SessionID");
+                    $("input[id='id_text']").attr("placeholder", "Nhập HashTag...");
+                    $("input[id='id_sessionid']").attr("placeholder", "Nhập SessionID...");
+                    break;
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1 class="text-center">Python Instagram Analyzer</h1>
+    <div class="text-center">
+        <a class="btn btn-default" style="color: #00ff00;" href="{% url 'Analyze' Choose='UserInfo' %}">USER</a>
+        <a class="btn btn-default" style="color: #ff9900;" href="{% url 'Analyze' Choose='Post' %}">POST</a>
+        <a class="btn btn-default" style="color: #ff3333;" href="{% url 'Analyze' Choose='HashTag' %}">HASHTAG</a>
+    </div>
+    <br>
+    <form class="text-center" id="form" action="." method="post">
+        {% csrf_token %}
+        {{ form.as_p}}
+        <input class="btn btn-default" style="font-weight: bold; " type="submit">
+    </form>
+    {% for key, value in context.items %}
+        {% if key == "Profile Picture URL" %}
+            <div id="image"></div>
+        {% else %}
+            <p>{{ key }} : {{ value }}</p>
+        {% endif %}
+    {% endfor %}
+{{ html }}
+</body>
+</html>
